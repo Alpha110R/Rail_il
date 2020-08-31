@@ -1,40 +1,88 @@
+package Rails_IL;
+
+import java.util.ArrayList;
 
 public class Ride {
-	private String departureStation; 
-	private String departureTime;
-	private String arrivalStation;
-	private String arrivalTime;
 	
-	public Ride(String departureStation, String departureTime, String arrivalStation, String arrivalTime) {
-		this.departureStation = departureStation;
-		this.departureTime = departureTime;
-		this.arrivalStation = arrivalStation;
-		this.arrivalTime = arrivalTime;
+	private ArrayList<Station> journey;
+	
+	
+	public Ride() {
+		journey = new ArrayList<Station>();
 	}
 	
-	public String getDepartureStation() {
-		return departureStation;
+	public Station getDepartureStation() {
+		return journey.get(0);
 	}
 	
-	public String getDepartureTime() {
-		return departureTime;
+	public Station getArrivalStation() {
+		return journey.get((journey.size() - 1));
 	}
 	
-	public String getArrivalStation() {
-		return arrivalStation;
+	public void addStation(Station station) {
+		journey.add(station);
 	}
 	
-	public String getArrivalTime() {
-		return arrivalTime;
+	public boolean stationsLocationExist(String startLocation, String endLocation) {
+		if(journey.size() == 0) {
+			return false;
+		}
+		
+		for(int i = 0; i < journey.size() - 1; i++) {
+			if(journey.get(i).getLocation().equals(startLocation)) {
+				for(int j = i + 1; j < journey.size(); j++) {
+					if(journey.get(j).getLocation().equals(endLocation)) { 
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
-	//for example "10:47" ==> 1047
-	public int departureTimeAsInt() {
-		String temp = departureTime.substring(0, 2) + departureTime.substring(3, 5);
-		return Integer.parseInt(temp);
+	private int getIndexOfLocation(String location) {
+		if(journey.size() == 0) {
+			return -1;
+		}
+		for(int i = 0; i < journey.size(); i++) {
+			if(journey.get(i).getLocation().equals(location)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
+	public Station getStationByLocation(String location) {
+		int index = getIndexOfLocation(location);
+		if(index == -1) {
+			return null;
+		}
+		return journey.get(index);
+	}
+	
+	public Ride createSubRide(String startLocation, String endLocation) {
+		if(!stationsLocationExist(startLocation, endLocation)) {
+			return null;
+		}
+		
+		Ride result = new Ride();
+		for(int i = getIndexOfLocation(startLocation); i <= getIndexOfLocation(endLocation); i++) {
+			result.addStation(journey.get(i));
+		}
+		
+		return result;
+	}
+	
+	
+	
+	@Override
 	public String toString() {
-		return departureStation + ", " + departureTime + ", " + arrivalStation + ", " + arrivalTime + ".";
+		StringBuffer sb = new StringBuffer();
+		
+		for(int i = 0; i < journey.size(); i++) {
+			sb.append(journey.get(i).toString());
+		}
+		
+		return sb.toString();
 	}
 }
