@@ -128,22 +128,9 @@ public class Main {
 				}
 			}
 		}
+		sortRideArrayList(result);
 		return result;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
 }
 
 
