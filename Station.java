@@ -7,17 +7,21 @@ public class Station implements Serializable {
 	private String location;
 	private String time;
 
-	public Station(String location, String time) {
+	public Station(String location, String time) throws Exception {
 		this.location = location;
-		this.time = time;
+		setTime(time);
 	}
 
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setTime(String time) throws Exception {
+		if(isTimeValid(time)) {
+			this.time = time;
+		} else {
+			throw new Exception("time entered is not valid.");
+		}
 	}
 
 	public String getLocation() {
@@ -35,6 +39,28 @@ public class Station implements Serializable {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isTimeValid(String time) {
+		if((time.length() != 5) || (time.charAt(2) != ':')) {
+			return false;
+		}
+		
+		String firstPartNumericInput = time.substring(0, 2);
+		String secondPartNumericInput = time.substring(3, 5);
+		
+		try {
+			int firstPartNumericValue = Integer.parseInt(firstPartNumericInput);
+			int secondPartNumericValue = Integer.parseInt(secondPartNumericInput); 
+			
+			if(firstPartNumericValue > 23 || secondPartNumericValue > 59) {
+				return false;
+			}	
+			
+		} catch(NumberFormatException exception) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

@@ -18,12 +18,18 @@ public class UserMain {
 		String startTime = args[1];
 		String endLocation = args[2];
 		
-		Rails res  = todaysRides.searchRide(new Station(startLocation, startTime), endLocation);
-		
-		if(res.isEmpty()) {
-			System.out.println("Sorry, there are no rides to show.");
-		} else {
-			System.out.println(res.toString());
+		try {
+
+			Rails res = todaysRides.searchRide(new Station(startLocation, startTime), endLocation);
+
+			if(res.isEmpty()) {
+				System.out.println("Sorry, there are no rides to show.");
+			} else {
+				System.out.println(res.toString());
+			}
+
+		} catch(Exception exception) {
+			System.out.println(exception.getMessage());
 		}
 	}
 
